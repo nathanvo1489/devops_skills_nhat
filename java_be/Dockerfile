@@ -8,12 +8,14 @@ COPY mvnw .
 COPY pom.xml .
 
 # Add execution permissions to the wrapper
-RUN chmod u+x mvnw
+RUN chmod +x mvnw
 # This will now work without exit code 126
 RUN ./mvnw dependency:go-offline
 
 # build
 COPY . .
+# Grant execution permission to the Maven wrapper
+RUN chmod +x ./mvnw
 # /app/target/*.jar
 RUN ./mvnw package -DskipTests
 
