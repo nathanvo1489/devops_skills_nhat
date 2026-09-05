@@ -1,0 +1,105 @@
+services:
+  # docker run --name database -d -v postgres_data_volume:/var/lib/postgresql -e POSTGRES_PASSWORD=12345 -p 5432:5432 postgres:18
+  database:
+    image: postgres:18
+    container_name: database
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
+    environment:
+      - POSTGRES_PASSWORD=12345
+
+  # docker run --name go_gin_be_container -d -p 8002:8080 --env-file=.env go_gin_be_image
+  go_gin_be:
+    build:
+      context: ../go_gin_be
+      dockerfile: Dockerfile
+    image: go_gin_be_image
+    container_name: go_gin_be
+    ports:
+      - 8002:8080
+    env_file:
+      - ../go_gin_be/.env
+    depends_on:
+      - database
+
+  # docker run --name java_be_container -d -p 8003:8080 --env-file=.env java_be_image
+  java_be:
+    build:
+      context: ../java_be
+      dockerfile: Dockerfile
+    image: java_be_image
+    container_name: java_be
+    ports:
+      - 8003:8080
+    env_file:
+      - ../java_be/.env
+    depends_on:
+      - database
+
+  # docker run --name js_nestjs_container -d -p 8004:3000 --env-file=.env js_nestjs_image
+  js_nestjs:
+    build:
+      context: ../js_nestjs
+      dockerfile: Dockerfile
+    image: js_nestjs_image
+    container_name: js_nestjs
+    ports:
+      - 8004:3000
+    env_file:
+      - ../js_nestjs/.env
+    depends_on:
+      - database
+
+  # docker run --name csharp_be_container -d -p 8001:8080 --env-file=.env csharp_be_image
+  csharp_be:
+    build:
+      context: ../csharp_be
+      dockerfile: Dockerfile
+    image: csharp_be_image
+    container_name: csharp_be
+    ports:
+      - 8005:8080
+    env_file:
+      - ../csharp_be/.env
+    depends_on:
+      - database
+
+  # docker run --name my-app-container -d -p 12345:3000 --network demo_network vulebaolong/my-app-image
+  js_nextjs:
+    build:
+      context: ../js_nextjs
+      dockerfile: Dockerfile
+    image: js_nextjs
+    # image: vulebaolong/my-app-image sai chip
+    container_name: js_nextjs
+    ports:
+      - 3001:3000
+
+  # docker run --name html_container -d -p 3000:80 html_image
+  html:
+    build:
+      context: ../html
+      dockerfile: Dockerfile
+    image: html_image
+    container_name: html
+    ports:
+      - 3002:80
+
+  # docker run --name js_react_vite_container -d -p 3001:80 js_react_vite_image
+  js_react_vite:
+    build:
+      context: ../html
+      dockerfile: Dockerfile
+    image: js_react_vite_image
+    container_name: js_react_vite
+    ports:
+      - 3003:80
+
+# volumes:
+#   postgres-data:
+
+# networks:
+#   demo_network:
+#     external: true
