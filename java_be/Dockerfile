@@ -14,8 +14,8 @@ RUN ./mvnw dependency:go-offline
 
 # build
 COPY . .
-# Grant execution permission to the Maven wrapper
-RUN chmod +x ./mvnw
+# Add execution permissions to the wrapper
+RUN chmod +x mvnw
 # /app/target/*.jar
 RUN ./mvnw package -DskipTests
 
