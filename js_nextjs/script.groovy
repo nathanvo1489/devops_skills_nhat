@@ -17,8 +17,9 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([
-                    usernamePassword(credentialsId:'jenkins-docker-login',
-                    usernameVariable:'DOCKER_USER', passwordVariable:'DOCKER_PASS')
+                    usernamePassword(credentialsId:'jenkins-docker-login', 
+                    usernameVariable:'DOCKER_USER', 
+                    passwordVariable:'DOCKER_PASS')
                 ]) {
                     sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
                 }
@@ -31,13 +32,23 @@ pipeline {
             }
         }
 
-        // stage('Deploy Container') {
-        //     steps {
-        //         sh'''
-        //             docker rm js_nextjs -f || true
-        //             docker run --name js_nextjs -d -p 3001:3000 js_nextjs_image
-        //         '''
-        //     }
-        // }
+        stage('Deploy Container') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId:'ssh-login', 
+                    keyFileVariable:'SSH_KEY', 
+                    usernameVariable:'SSH_USER'),
+                    string(credentialsId:'ip-devops-ubuntu', 
+                    variable:'IP_SERVER_RUN')
+                ]) {
+                
+                
+                sh'''
+                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "
+                        ls -la
+                    "
+                '''
+            }
+        }
     }
 }
