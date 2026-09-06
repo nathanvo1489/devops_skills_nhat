@@ -27,9 +27,7 @@ pipeline {
 
         stage('Push Docker Image to Docker Hub') {
             steps {
-                sh '''
-                    docker push nathanvo1489/js_nextjs_image:latest
-                '''
+                sh 'docker push nathanvo1489/js_nextjs_image:latest'
             }
         }
 
