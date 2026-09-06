@@ -41,13 +41,11 @@ pipeline {
                     string(credentialsId:'ip-devops-ubuntu', 
                     variable:'IP_SERVER_RUN')
                 ]) {
-                
-                
-                sh'''
-                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "
-                        ls -la
-                    "
-                '''
+                    sh'''
+                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "
+                            ls -la
+                        "
+                    '''
                 }
             }
         }
