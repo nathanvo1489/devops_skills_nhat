@@ -71,7 +71,13 @@ services:
     # build:
     #   context: ../js_nextjs
     #   dockerfile: Dockerfile
-    image: nathanvo1489/js_nextjs_image:latest
+
+    # Build Image via Docker Hub
+    # image: nathanvo1489/js_nextjs_image:latest
+
+    # Build Image via Jenkins
+    image: js_nextjs_image:latest
+
     # image: vulebaolong/my-app-image sai chip
     container_name: js_nextjs
     ports:

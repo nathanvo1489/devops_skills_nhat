@@ -10,27 +10,32 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nathanvo1489/js_nextjs_image:latest ./js_nextjs'
+                /* Build Image via Docker Hub */
+                // sh 'docker build -t nathanvo1489/js_nextjs_image:latest ./js_nextjs'
+
+                /* Build Image via Jenkins */
+                sh 'docker build -t js_nextjs_image:latest ./js_nextjs'
             }
         }
 
-        stage('Login to Docker Hub') {
-            steps {
-                withCredentials([
-                    usernamePassword(credentialsId:'jenkins-docker-login', 
-                    usernameVariable:'DOCKER_USER', 
-                    passwordVariable:'DOCKER_PASS')
-                ]) {
-                    sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
-                }
-            }
-        }
+        /* Build Image via Docker Hub
+        // stage('Login to Docker Hub') {
+        //     steps {
+        //         withCredentials([
+        //             usernamePassword(credentialsId:'jenkins-docker-login', 
+        //             usernameVariable:'DOCKER_USER', 
+        //             passwordVariable:'DOCKER_PASS')
+        //         ]) {
+        //             sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
+        //         }
+        //     }
+        // }
 
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                sh 'docker push nathanvo1489/js_nextjs_image:latest'
-            }
-        }
+        // stage('Push Docker Image to Docker Hub') {
+        //     steps {
+        //         sh 'docker push nathanvo1489/js_nextjs_image:latest'
+        //     }
+        // } */
 
         stage('Deploy Container') {
             steps {
@@ -41,7 +46,11 @@ pipeline {
                     string(credentialsId:'ip-devops-ubuntu', 
                     variable:'IP_SERVER_RUN')
                 ]) {
+                    /* Build Image via Jenkins */
+                    // Transfer Docker Image to Remote Server via SSH (Jenkins)
                     sh'''
+                        docker save js_nextjs_image:latest | gzip | ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "gunzip | docker load"
+                        
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "
                             cd /home/ubuntu/devops_04_nhat/docker-compose
 
@@ -51,6 +60,18 @@ pipeline {
                             docker image prune -f
                         "
                     '''
+
+                    /* Build Image via Docker Hub */
+                    // sh'''                     
+                    //     ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${IP_SERVER_RUN} "
+                    //         cd /home/ubuntu/devops_04_nhat/docker-compose
+
+                    //         docker compose pull js_nextjs
+                    //         docker compose up -d --force-recreate js_nextjs
+                    //         docker ps
+                    //         docker image prune -f
+                    //     "
+                    // ''' */
                 }
             }
         }
