@@ -1,0 +1,22 @@
+# Tên workflow
+name: Practice Workflow
+# Sự kiện kích hoạt (trigger)
+on: 
+    push:
+        # Chỉ định nhánh để kích hoạt workflow
+        branches: [main]
+
+# Biến môi trường dùng chung (optional)
+env:
+    ABC: "ANHNHAT"
+
+# permissions: # Quyền GitHub Token (optional)
+
+# Job list
+jobs:
+    # Job's name
+    check:
+        runs-on: ubuntu-latest # Chỉ định môi trường chạy job
+        steps: # workflow (steps) in job
+            - name: Check
+              run: ls -la
