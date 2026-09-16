@@ -1,0 +1,25 @@
+controller:
+    kind: deployment
+    replicaCount: 1
+
+    hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
+
+    nodeSelector:
+        ingress-node: "true"
+
+    tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+
+    service:
+        create: false
+
+    reportIngressStatus:
+        enable: false
+
+    config:
+        entries:
+            lb-method: "round_robin"
+            # lb-method: "least_conn"

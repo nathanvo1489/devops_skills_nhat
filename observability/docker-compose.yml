@@ -26,14 +26,32 @@ services:
     depends_on:
       - loki
 
+  # docker run -d --name=prometheus -p 9090:9090 prom/prometheus
+  prometheus:
+    image: prom/prometheus:v3.14.0
+    container_name: prometheus
+    extra_hosts:
+      - "host:host-gateway"
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus
+  
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.12.1
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
 volumes:
   grafana-data:
   loki-data:
   alloy-data:
+  prometheus-data:
 
-  # # docker run -d --name=prometheus -p 9090:9090 prom/prometheus
-  # prometheus:
-  #   image: prom/prometheus
-  #   container_name: prometheus
-  #   ports:
-  #     - 9090:9090
