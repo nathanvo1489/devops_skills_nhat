@@ -3,7 +3,7 @@ set -euo pipefail
 # Để script dừng ngay khi một lệnh lỗi.
 
 
-CONTROL_PLANE_PRIVATE_IP="172.31.38.103" # Private IP của EC2 Control Plane.
+CONTROL_PLANE_PRIVATE_IP="172.31.3.12" # Private IP của EC2 Control Plane.
 POD_CIDR="192.168.0.0/16" # Dải IP dùng cho Pod.  Giá trị này phải phù hợp với CNI sẽ cài sau kubeadm init.
 
 

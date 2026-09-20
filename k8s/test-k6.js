@@ -1,16 +1,17 @@
+// docker run --rm -i grafana/k6 run - .\test-k6.js
 // k6 run test-k6.js
 
 import http from "k6/http";
 import { check } from "k6";
 
 export const options = {
-    vus: 100,
+    vus: 5,
     duration: "30m",
 };
 
 export default function () {
     // const domain = "http://localhost:8888/api";
-    const domain = "https://nodepad-be.vulebaolong.com/api";
+    const domain = "https://nodepad-be.nathan-vo.com/api";
 
     const response = http.post(
         `${domain}/auth/login`,

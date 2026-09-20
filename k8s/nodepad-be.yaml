@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
                 - name: nodepad-be
-                  image: vulebaolong/img-nodepad_be:latest
+                  image: nathanvo1489/img-nodepad_be:latest
                   imagePullPolicy: Always
 
                   ports:
@@ -31,11 +31,11 @@ spec:
 
                   resources:
                       requests:
-                          cpu: 300m
-                          memory: 128Mi
+                          cpu: 400m
+                          memory: 400Mi
                       limits:
-                          cpu: "1"
-                          memory: 384Mi
+                          cpu: 400m
+                          memory: 400Mi
 
 ---
 apiVersion: v1
@@ -66,7 +66,7 @@ spec:
         name: nodepad-be
 
     minReplicas: 1
-    maxReplicas: 15
+    maxReplicas: 4
 
     metrics:
         - type: Resource
@@ -89,11 +89,11 @@ spec:
 
     tls:
         - hosts:
-              - nodepad-be.vulebaolong.com
-          secretName: vulebaolong.com
+              - nodepad-be.nathan-vo.com
+          secretName: nathan-vo.com
 
     rules:
-        - host: nodepad-be.vulebaolong.com
+        - host: nodepad-be.nathan-vo.com
           http:
               paths:
                   - path: /
