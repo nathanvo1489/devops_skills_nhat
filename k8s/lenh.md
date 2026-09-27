@@ -68,13 +68,11 @@ watch kubectl top pod
 watch kubectl top node
 ```
 
-SSH tunnel lệnh tạo cổng trung gian
+SSH tunnel lệnh tạo cổng trung gian, run inside Key folder
 ```bash
-ssh -i devops.pem \
-  -N \
-  -L 16443:127.0.0.1:6443 \
-  ubuntu@13.251.59.204
+ssh -i devops.pem -N -L 16443:127.0.0.1:6443 ubuntu@13.214.154.153
 
+[IP_server_public]: of control-plane: 13.214.154.153
 -N No remote command: không mở giao diện gõ CLI
 -L local port forward
 ```
@@ -84,7 +82,7 @@ ssh -i devops.pem \
 - Tạo Template: bản lưu setting khi launch instant nối thêm AMI
 => Bản Template đẩy đủ
 
-- Tạo Policy
+- Tạo Policy "Full Cluster Autoscaler Features Policy" below, and past to JSON area
 https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#iam-policy
 
 - Tạo Role

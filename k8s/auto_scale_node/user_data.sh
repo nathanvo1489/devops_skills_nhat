@@ -12,7 +12,8 @@ echo "KUBELET_EXTRA_ARGS=--provider-id=aws:///$AZ/$INSTANCE_ID" > /etc/default/k
 systemctl start crio
 
 # JOIN KUBERNETES
+# type this cmd in control-plane to get the join command
 # sudo kubeadm token create --ttl 0 --print-join-command
-kubeadm join 172.31.15.97:6443 --token 2dsxzy.nf9djh7kqza8wieg --discovery-token-ca-cert-hash sha256:f5c7511b83bdb14ba2e5e94327a712873a7227c457f83d693e157af36384c9e0 
-
+kubeadm join 172.31.3.12:6443 --token bchr14.oqotfgrgfbzqoywh --discovery-token-ca-cert-hash sha256:8322118d99f99d15cfa8c4129a6125473824d7df45b7168f6593e3c15c0f86b0
+# join control-plane
 systemctl restart kubelet

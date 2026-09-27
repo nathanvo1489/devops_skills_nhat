@@ -1,0 +1,21 @@
+services:
+  backend1:
+    container_name: backend1
+    image: backend_img
+    hostname: backend1
+    ports:
+      - "127.0.0.1:5001:8080"
+
+  backend2:
+    container_name: backend2
+    image: backend_img
+    hostname: backend2
+    ports:
+      - "127.0.0.1:5002:8080"
+
+  backend3:
+    container_name: backend3
+    image: backend_img
+    hostname: backend3
+    ports:
+      - "127.0.0.1:5003:8080"
