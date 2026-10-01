@@ -1,4 +1,5 @@
 ```bash
+# must run in the parent folder of 'terraform'
 docker run --name ubuntu-terraform -d -it -v ./terraform:/root/terraform ubuntu
 
 # open local terminal and login terraform ubuntu with terminal
@@ -7,8 +8,9 @@ docker exec -it ubuntu-terraform bash
 # install terraform into /usr/local/bin/
 mv terraform /usr/local/bin/
 
-# install curl first
+# install aws CLI, but need install curl first
 apt update && apt install -y curl unzip
+# goto folder 'aws' and run
 bash install.sh --system
 
 # check version
