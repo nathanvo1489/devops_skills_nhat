@@ -1,0 +1,6 @@
+.git
+.env
+.env.*
+gallery
+photo-gallery
+*_test.go

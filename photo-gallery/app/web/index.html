@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photo Gallery Lab</title>
+<style>
+body{font:16px system-ui;max-width:1050px;margin:40px auto;padding:0 20px;background:#f4f6fa;color:#203045}h1{margin-bottom:8px}form{display:grid;gap:12px;background:white;padding:24px;border-radius:12px;margin:24px 0}input,textarea,button{font:inherit;padding:10px;border:1px solid #bcc6d4;border-radius:6px}label{display:grid;gap:5px}button{background:#185bd1;color:white;cursor:pointer}button:disabled{opacity:.5}#photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}article{background:white;padding:16px;border-radius:12px}img{width:100%;height:210px;object-fit:cover}#status{white-space:pre-wrap}small{color:#536275}
+</style>
+<h1>Photo Gallery</h1><p>Chọn ảnh → lưu file trên S3 → lưu metadata → ghi log qua API Gateway và Lambda.</p>
+<small>Lab chia sẻ ảnh công khai qua CDN. Chỉ dùng ảnh mẫu, không có tài khoản hay album riêng tư.</small>
+<form id="upload">
+<label>Tiêu đề<input name="title" required maxlength="100"></label>
+<label>Mô tả<textarea name="description" maxlength="400"></textarea></label>
+<label>Email (không bắt buộc, chỉ ghi log)<input name="email" type="text"></label>
+<label>Ảnh JPEG / PNG / WebP, tối đa 5 MiB<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" required></label>
+<button id="submit">Upload ảnh</button>
+</form>
+<p id="status" role="status"></p><button id="reload">Tải lại danh sách</button><h2>Ảnh đã lưu</h2><div id="photos"></div>
+<script>
+const statusBox=document.querySelector('#status');
+async function load(){
+ const response=await fetch('/api/photos'); const data=await response.json();
+ if(!response.ok)throw new Error(data.error||'Không tải được danh sách');
+ const list=document.querySelector('#photos');list.replaceChildren();
+ for(const p of data){
+  const card=document.createElement('article'),img=document.createElement('img'),title=document.createElement('h3'),desc=document.createElement('p'),date=document.createElement('small');
+  img.src=p.url;img.alt=p.title;img.loading='lazy';title.textContent=p.title;desc.textContent=p.description;date.textContent=new Date(p.created_at).toLocaleString();
+  img.onerror=()=>{img.alt='Chưa tải được ảnh — kiểm tra CloudFront/OAC hoặc S3 key';};
+  card.append(img,title,desc,date);list.append(card);
+ }
+}
+document.querySelector('#reload').onclick=()=>load().catch(e=>statusBox.textContent=e.message);
+document.querySelector('#upload').onsubmit=async e=>{
+ e.preventDefault();const button=document.querySelector('#submit');button.disabled=true;statusBox.textContent='Đang upload…';
+ try{
+  const response=await fetch('/api/photos',{method:'POST',body:new FormData(e.target)});const data=await response.json();
+  const mail=data.notification==='accepted'?'Lambda đã ghi log thông báo.':data.notification==='failed'?'Ghi log thông báo thất bại; kiểm tra Lambda/API Gateway.':'';
+  if(!response.ok)throw new Error((data.error||'Upload thất bại')+' '+mail);
+  statusBox.textContent='Ảnh đã lưu thành công. '+mail;await load();
+ }catch(error){statusBox.textContent=error.message;}finally{button.disabled=false;}
+};
+load().catch(e=>statusBox.textContent=e.message);
+</script>
+</html>

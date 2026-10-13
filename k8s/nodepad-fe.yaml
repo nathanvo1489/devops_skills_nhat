@@ -19,7 +19,7 @@ spec:
         spec:
             containers:
                 - name: nodepad-fe
-                  image: vulebaolong/img-nodepad_fe:latest
+                  image: nathanvo1489/img-nodepad_fe:latest
                   imagePullPolicy: Always
 
                   ports:
@@ -89,11 +89,11 @@ spec:
 
     tls:
         - hosts:
-              - nodepad.vulebaolong.com
-          secretName: vulebaolong.com
+              - nodepad.nathan-vo.com
+          secretName: nathan-vo.com
 
     rules:
-        - host: nodepad.vulebaolong.com
+        - host: nodepad.nathan-vo.com
           http:
               paths:
                   - path: /

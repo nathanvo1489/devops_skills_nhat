@@ -115,7 +115,7 @@ docker run --name database -d -v ./postgres_data:/var/lib/postgresql -e POSTGRES
 
 # Mongo
 docker volume create mongo_data_volume
-docker run --name mongo -d -v mongo_data_volume:/data/db mongo
+docker run --name mongodb -d -v mongo_data_volume:/data/db -e MONGO_INITDB_ROOT_PASSWORD=12345 -p 27017:27017 mongo:latest
 
 # MySQL
 docker volume create mysql_data_volume
